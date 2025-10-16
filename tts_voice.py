@@ -3,29 +3,40 @@ import io
 import requests
 import config
 
-ELEVEN_URL = "https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
-
 def text_to_speech_mp3(text: str) -> bytes:
-    """
-    Convert text to speech using ElevenLabs cloned voice.
-    Returns raw MP3 bytes suitable for st.audio.
-    """
-    if not (config.ELEVEN_API_KEY and config.ELEVEN_VOICE_ID):
-        # If no key/voice, gracefully skip TTS.
+    api_key = config.ELEVEN_API_KEY.strip() if config.ELEVEN_API_KEY else ""
+    voice_id = config.ELEVEN_VOICE_ID.strip() if config.ELEVEN_VOICE_ID else ""
+
+    if not api_key or not voice_id:
+        print("⚠️ ElevenLabs key or voice ID missing")
         return b""
 
-    url = ELEVEN_URL.format(voice_id=config.ELEVEN_VOICE_ID)
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
     headers = {
-        "xi-api-key": config.ELEVEN_API_KEY,
-        "accept": "audio/mpeg",
-        "content-type": "application/json",
+        "xi-api-key": api_key,
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
     }
+
     payload = {
         "text": text,
         "model_id": "eleven_multilingual_v2",
-        "voice_settings": {"stability": 0.5, "similarity_boost": 0.8},
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.8,
+            "style": 0.0,
+            "use_speaker_boost": True
+        }
     }
-    r = requests.post(url, headers=headers, json=payload, timeout=60)
-    #r.raise_for_status()
-    return io.BytesIO(r.content).getvalue()
 
+    print("📡 Sending TTS request:", url)
+    r = requests.post(url, headers=headers, json=payload)
+
+    print("🔍 Status:", r.status_code)
+    if r.status_code != 200:
+        print("❌ ElevenLabs Error:", r.text)
+        return b""
+
+    audio = io.BytesIO(r.content).getvalue()
+    print("✅ Audio bytes:", len(audio))
+    return audio
