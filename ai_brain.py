@@ -6,7 +6,7 @@ genai.configure(api_key=config.GEMINI_API_KEY)
 
 # ✅ 2. Initialize the model
 # Choose "gemini-1.5-flash" (fast & free) or "gemini-1.5-pro" (more powerful)
-MODEL_NAME = config.GEMINI_MODEL if hasattr(config, "GEMINI_MODEL") else "gemini-1.5-flash"
+MODEL_NAME = config.GEMINI_MODEL if hasattr(config, "GEMINI_MODEL") else "gemini-2.0-flash"
 model = genai.GenerativeModel(MODEL_NAME)
 
 # ✅ 3. System prompt (controls EchoYou’s personality and tone)
@@ -71,3 +71,4 @@ if __name__ == "__main__":
     ]
     reply = ask_gemini(test_history, "How can I sound more confident while talking?")
     print("EchoYou:", reply)
+
