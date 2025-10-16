@@ -107,7 +107,7 @@ if send and user_text:
     st.session_state.history.append({"role": "assistant", "content": reply})
 
     # Attempt TTS (skip silently if no key/voice)
-    audio_bytes = text_to_speech_mp3(reply)
+    #audio_bytes = text_to_speech_mp3(reply)
     st.session_state.last_audio = audio_bytes if audio_bytes else None
 
 # ---- Render transcript & audio ----
@@ -123,3 +123,4 @@ if st.session_state.last_audio:
     st.audio(st.session_state.last_audio, format="audio/mp3")
 
 st.caption("Tip: If mic STT doesn’t work in your browser, type your message and press **Send**.")
+
