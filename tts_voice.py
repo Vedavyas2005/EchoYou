@@ -26,5 +26,6 @@ def text_to_speech_mp3(text: str) -> bytes:
         "voice_settings": {"stability": 0.5, "similarity_boost": 0.8},
     }
     r = requests.post(url, headers=headers, json=payload, timeout=60)
-    r.raise_for_status()
+    #r.raise_for_status()
     return io.BytesIO(r.content).getvalue()
+
