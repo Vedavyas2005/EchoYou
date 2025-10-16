@@ -1,0 +1,6 @@
+streamlit
+# Mic recorder / browser STT component (free, client-side)
+streamlit-mic-recorder
+# Google Gemini client (new interface)
+google-generativeai
+requests
